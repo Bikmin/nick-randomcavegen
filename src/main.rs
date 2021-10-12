@@ -190,8 +190,18 @@ async fn ccrandom(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
 
     match run_ccrandom().await {
         Ok(formatargs) => {
+            
             let arg_map = Args::new(&formatargs, &[Delimiter::Single(' ')]);
-            cavegen(ctx, msg, arg_map).await;
+            match cavegen(ctx, msg, arg_map).await {
+                Ok(()) => {
+                    msg.channel_id.say(&ctx.http, "Cave Gen Ok!").await?;
+                }
+                Err(err) => {
+                    msg.channel_id.say(&ctx.http, err.to_string()).await?;
+                    eprintln!("{:#?}", err);
+                }
+            }
+
             msg.channel_id.say(
                 &ctx.http,
                 format!("Complete With Args {}!", formatargs)
