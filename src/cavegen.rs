@@ -99,7 +99,7 @@ pub async fn run_caveinfo(
 
 pub async fn run_ccrandom() -> Result<String, String> {
     let charset = "ABCDEF0123456789";
-    let cave = colossal";
+    let cave = "colossal";
     let seed: &str = &random_string::generate(8, charset);
     let formatargs = format!("{} 0x{}", cave, seed);
 
