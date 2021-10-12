@@ -4,7 +4,7 @@ mod args;
 mod cavegen;
 mod cooldown;
 
-use rand::Rng;
+use random_string::generate;
 use cavegen::{clean_output_dir, run_cavegen, run_caveinfo};
 use cooldown::{check_cooldown, update_cooldown};
 use serenity::{
@@ -12,7 +12,7 @@ use serenity::{
     framework::{
         standard::{
             macros::{command, group, hook},
-            Args, CommandResult,
+            Args, CommandResult, Delimiter
         },
         StandardFramework,
     },
@@ -175,19 +175,20 @@ async fn caveinfo(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
     Ok(())
 }
 #[command]
-async fn ccrandom() -> CommandResult {
-    const CHARSET: &[u8] = b"ABCDEF0123456789";
-    const SEED_LEN: usize = 8;
-    let mut rng = rand::thread_rng();
+async fn ccrandom(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
+    let charset = "ABCDEF0123456789";
 
-    let seed: String = (0..SEED_LEN)
-        .map(|_| {
-            let idx = rng.gen_range(0..CHARSET.len());
-            CHARSET[idx] as char
-        })
-        .collect();
+    let cave = "colossal";
+    let seed: &str = &generate(8, charset);
+    let args: &str = &format!("{} 0x{}", cave, seed);
 
-    msg.channel_id.say("!cavegen colossal 0x{}", seed);
+    let mut arg_map = Args::new(args, &[Delimiter::Single(' ')]);
+
+    cavegen(ctx, msg, arg_map).await;
+
+    // Clean up after ourselves
+    clean_output_dir().await;
+
 
     Ok(())
 }
