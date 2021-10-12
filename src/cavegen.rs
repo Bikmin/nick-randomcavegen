@@ -104,7 +104,7 @@ pub async fn run_ccrandom() -> Result<String, String> {
     let formatargs = format!("{} 0x{}", cave, seed);
 
     if cave.eq("") || seed.eq("") {
-        Err("Seed gen failed! There was a problem with random_string :(".to_string())
+        Err("Seed gen failed! This is probably a bug :(".to_string())
     } else {
         Ok(formatargs)
     }
