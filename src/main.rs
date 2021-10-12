@@ -1,11 +1,10 @@
-#![feature(entry_insert)]
+#![feature(entry_insert, bool_to_option)]
 
 mod args;
 mod cavegen;
 mod cooldown;
 
-use random_string::generate;
-use cavegen::{clean_output_dir, run_cavegen, run_caveinfo};
+use cavegen::{clean_output_dir, run_cavegen, run_caveinfo, run_ccrandom};
 use cooldown::{check_cooldown, update_cooldown};
 use serenity::{
     async_trait,
@@ -188,15 +187,21 @@ async fn ccrandom(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
     }
 
     msg.channel_id.say(&ctx.http, "Processing...".to_string()).await?;
-    let charset = "ABCDEF0123456789";
 
-    let cave = "colossal";
-    let seed: &str = &generate(8, charset);
-    let formatargs: &str = &format!("{} 0x{}", cave, seed);
-
-    let arg_map = Args::new(formatargs, &[Delimiter::Single(' ')]);
-
-    cavegen(ctx, msg, arg_map).await?;
+    match run_ccrandom().await {
+        Ok(formatargs) => {
+            let arg_map = Args::new(&formatargs, &[Delimiter::Single(' ')]);
+            cavegen(ctx, msg, arg_map).await;
+            msg.channel_id.say(
+                &ctx.http,
+                format!("Complete With Args {}!", formatargs)
+            ).await?;
+        }
+        Err(err) => {
+            msg.channel_id.say(&ctx.http, err.to_string()).await?;
+            eprintln!("{:#?}", err);
+        }
+    }
 
     // Clean up after ourselves
     clean_output_dir().await;

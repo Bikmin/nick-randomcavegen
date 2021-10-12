@@ -1,3 +1,5 @@
+
+
 use std::{collections::HashMap, error::Error, path::PathBuf};
 use tokio::{fs::File, process::Command};
 
@@ -92,6 +94,19 @@ pub async fn run_caveinfo(
         Err("Cavegen failed! This is probably a bug :(".into())
     } else {
         Ok(output_file)
+    }
+}
+
+pub async fn run_ccrandom() -> Result<String, String> {
+    let charset = "ABCDEF0123456789";
+    let cave = colossal";
+    let seed: &str = &random_string::generate(8, charset);
+    let formatargs = format!("{} 0x{}", cave, seed);
+
+    if cave.eq("") || seed.eq("") {
+        Err("Seed gen failed! This is probably a bug :(".to_string())
+    } else {
+        Ok(formatargs)
     }
 }
 
