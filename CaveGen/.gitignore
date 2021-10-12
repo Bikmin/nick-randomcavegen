@@ -1,0 +1,35 @@
+# Compiled class file
+*.class
+
+# Package Files #
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.szs
+*.bti
+*wszst-setup.txt
+*.bmd
+
+output/*/*.png
+output/*
+output251/*
+outputNewYear/*
+!reports/*.txt
+seed_chosen.png
+files/times_table*
+im/*
+im_save/*
+files/cleanup.bat
+
+config_*
+files/cave_name.txt
+
+files/templates/digits_*
+
+*~
+__pycache*
+
+.vscode*
