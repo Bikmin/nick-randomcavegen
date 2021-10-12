@@ -1,7 +1,7 @@
 [package]
 name = "cavegen_bot"
-version = "0.2.0"
-authors = ["mayabyte <mayahayden@protonmail.com>"]
+version = "0.2.1"
+authors = ["mayabyte <mayahayden@protonmail.com>, Bikmin <nadsitt@gmail.com>, PandaSci <kaeden@bcsengineering.com>"]
 edition = "2018"
 
 [dependencies.serenity]
