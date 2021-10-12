@@ -4,6 +4,7 @@ mod args;
 mod cavegen;
 mod cooldown;
 
+use rand::Rng;
 use cavegen::{clean_output_dir, run_cavegen, run_caveinfo};
 use cooldown::{check_cooldown, update_cooldown};
 use serenity::{
@@ -47,7 +48,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 }
 
 #[group]
-#[commands(cavegen, caveinfo)]
+#[commands(cavegen, caveinfo, ccrandom)]
 struct General;
 
 struct Handler;
@@ -170,6 +171,23 @@ async fn caveinfo(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
 
     // Clean up after ourselves
     clean_output_dir().await;
+
+    Ok(())
+}
+#[command]
+async fn ccrandom() -> CommandResult {
+    const CHARSET: &[u8] = b"ABCDEF0123456789";
+    const SEED_LEN: usize = 8;
+    let mut rng = rand::thread_rng();
+
+    let seed: String = (0..SEED_LEN)
+        .map(|_| {
+            let idx = rng.gen_range(0..CHARSET.len());
+            CHARSET[idx] as char
+        })
+        .collect();
+
+    msg.channel_id.say("!cavegen colossal 0x{}", seed);
 
     Ok(())
 }
