@@ -175,20 +175,20 @@ async fn caveinfo(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
     Ok(())
 }
 #[command]
-async fn ccrandom(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
+async fn ccrandom(ctx: &Context, msg: &Message, _args: Args) -> CommandResult {
+    msg.channel_id.say(&ctx.http, "Processing...".to_string()).await?;
     let charset = "ABCDEF0123456789";
 
     let cave = "colossal";
     let seed: &str = &generate(8, charset);
     let args: &str = &format!("{} 0x{}", cave, seed);
 
-    let mut arg_map = Args::new(args, &[Delimiter::Single(' ')]);
+    let arg_map = Args::new(args, &[Delimiter::Single(' ')]);
 
-    cavegen(ctx, msg, arg_map).await;
+    cavegen(ctx, msg, arg_map).await?;
 
     // Clean up after ourselves
     clean_output_dir().await;
-
 
     Ok(())
 }
