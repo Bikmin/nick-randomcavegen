@@ -1,6 +1,6 @@
 # Cavegen Discord Bot
 
-Simple bot to run Jhawk's excellent Cavegen tool from the convenience of a Discord channel.
-
-To build: set the `DISCORD_TOKEN` environment variable appropraitely and run `cargo build`.
+To build: create a "token.txt" file with your bots token inside, and run `cargo build`.
 To run: `cargo run`.
+
+original bot made by mayabyte: https://github.com/mayabyte/cavegen-bot
